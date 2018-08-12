@@ -1,0 +1,51 @@
+<div class="login-page" [@routerTransition]>
+    <div class="row justify-content-md-center">        
+        <div class="col-md-4">
+            <img class="user-avatar" src="assets/images/logo.png" width="150px" />
+            <h1>Дари Храна</h1>
+            <a class="btn rounded-btn" (click)="setSignUpForm('takerForm')">Аз съм благотворителна oрганизация</a>
+            <a class="btn rounded-btn" (click)="setSignUpForm('giverForm')">Аз съм дарител на храна</a>
+            <div [ngSwitch]="registerFormName">
+                <form  role="form" *ngSwitchCase="'giverForm'">
+                    <div class="form-content" >
+                        <div class="form-group">
+                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Име">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Фамилия">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Емайл">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" class="form-control input-underline input-lg" id="" placeholder="Парола">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control input-underline input-lg" id="" placeholder="Повтори Парола">
+                        </div>
+                    </div>
+                    <a class="btn rounded-btn" [routerLink]="['/tables']"> Регистрирай се</a>&nbsp;
+                </form>
+                <form  role="form" *ngSwitchCase="'takerForm'">
+                    <div class="form-content" >
+                        <div class="form-group">
+                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Име на организацията">
+                        </div>                    
+                        <div class="form-group">
+                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Емайл">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" class="form-control input-underline input-lg" id="" placeholder="Парола">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control input-underline input-lg" id="" placeholder="Повтори Парола">
+                        </div>
+                    </div>
+                    <a class="btn rounded-btn" [routerLink]="['/tables']">Регистрирай се</a>&nbsp;
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
