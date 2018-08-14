@@ -1,0 +1,11 @@
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\bin\Debug\netcoreapp2.0\GiveFoodDataModels.deps.json
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\bin\Debug\netcoreapp2.0\GiveFoodDataModels.dll
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\bin\Debug\netcoreapp2.0\GiveFoodDataModels.pdb
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.csproj.CoreCompileInputs.cache
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.AssemblyInfoInputs.cache
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.AssemblyInfo.cs
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.dll
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.pdb
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Identity.Stores.xml
+C:\Users\spashova.DEV\source\repos\GiveFoodApp\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.csprojResolveAssemblyReference.cache
