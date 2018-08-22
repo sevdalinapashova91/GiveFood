@@ -1,21 +1,28 @@
 ﻿using GiveFoodServices.Documents;
+using GiveFoodServices.Documents.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GiveFoodWebApi.Controllers.Upload
 {
     public class UploadController : Controller
     {
-        private readonly IAmazonService amazonService;
-        public UploadController(IAmazonService service)
+        private readonly IDocumentService documentService;
+        public UploadController(IDocumentService service)
         {
-            this.amazonService = service;
+            this.documentService = service;
         }
 
         [HttpPost]
-        public void StartUpload(DocumentViewModel document)
+        public async Task Upload([FromBody]DocumentUploadDto document)
         {
-            this.amazonService.UploadFile(document.DocumentPath);
+            await this.documentService.Upload(document);
         }
-        public void CompleteUpload() { }
+
+        [HttpPost]
+        public void Download([FromBody]DocumentViewModel document)
+        {
+            this.documentService.Download(document.Id);
+        }
     }
 }

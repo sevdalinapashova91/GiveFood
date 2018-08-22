@@ -1,17 +1,24 @@
-﻿
+﻿using GiveFoodServices.Users;
+using GiveFoodServices.Users.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GiveFoodWebApi.Controllers.Account
 {
+    //ToDO add logged only 
     public class ProfileController : Controller
     {
-        [HttpGet]
-        public ProfileViewModel Get(string userId)
+        public readonly ProfileService profileService;
+        public ProfileController(ProfileService profileService)
         {
-            return null;
+            this.profileService = profileService;
         }
 
+        [HttpGet]
+        public Task<ProfileDto> Get(string email) => profileService.Get(email);
+
         [HttpPost]
-        public void CreateProfile(ProfileViewModel profileData) { }
+        public Task UpdateUserProfile([FromBody]ProfileInputModel inputModel) => profileService.UpdateName(inputModel.Name, string.Empty);
+
     }
 }

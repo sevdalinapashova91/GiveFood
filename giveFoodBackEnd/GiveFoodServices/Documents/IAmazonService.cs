@@ -1,8 +1,12 @@
-﻿namespace GiveFoodServices.Documents
+﻿using Amazon.S3.Model;
+using System.Threading.Tasks;
+
+namespace GiveFoodServices.Documents
 {
     public interface IAmazonService
     {
-        void DownloadFile();
-        void UploadFile(string filePath);
+        Task<GetObjectResponse> DownloadFile(string keyName);
+
+        Task<string> UploadFile();
     }
 }

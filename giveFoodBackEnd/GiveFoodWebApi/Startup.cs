@@ -1,19 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using GiveFoodData;
 using GiveFoodDataModels;
 using GiveFoodServices.Roles;
 using GiveFoodServices.Documents;
+using Amazon.S3;
+using Amazon;
+using GiveFoodServices.Admin;
+using GiveFood.DAL.Documents;
+using GiveFoodServices.Users;
+using GiveFoodServices.Users.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace GiveFoodWebApi
 {
@@ -29,47 +31,78 @@ namespace GiveFoodWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<GiveFoodDbContext>( options =>
-            options.UseSqlServer("Data Source=.\\SQLExpress;Initial Catalog=GiveFood;Trusted_Connection=True;MultipleActiveResultSets=True;"));
+            services.AddDbContext<GiveFoodDbContext>(options =>
+           options.UseSqlServer(Configuration["GiveFoodDatabase"]));
 
+             
             services.AddIdentity<User, ApplicationRole>()
-                .AddEntityFrameworkStores<GiveFoodDbContext>()
-                .AddDefaultTokenProviders();
+                    .AddEntityFrameworkStores<GiveFoodDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequiredUniqueChars = 6;
+                options.Password.RequireLowercase = true;
 
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = true;
             });
 
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromDays(150);
+                options.Cookie.Expiration = TimeSpan.FromMinutes(120);
                 options.LoginPath = "/Account/LogIn"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/Account/LogOut"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
                 options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
             });
+
+
+
+            services.AddMvc();//.AddWebApiConventions();
+
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(60);
+                options.ExcludedHosts.Add("example.com");
+                options.ExcludedHosts.Add("www.example.com");
+            });
+
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 5001;
+            });
+
+            services.AddScoped<IAmazonS3>(s => new AmazonS3Client(
+                Configuration["AmazonS3:UserName"],
+                Configuration["AmazonS3:UserSecret"],
+                RegionEndpoint.EUCentral1));
+
+            //app services and repos
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAmazonService, AmazonService>();
-            // Add application services.
-            //services.AddTransient<IEmailSender, EmailSender>();
-            services.AddMvc();
+            services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddSingleton<IEmailService, EmailService>();
+          
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+              services.AddScoped<IAuthService, AuthService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,25 +113,35 @@ namespace GiveFoodWebApi
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
                 app.UseDatabaseErrorPage();
+                //ConfigurationBuilder.AddUserSecrets<Startup>();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
+           // app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseCookiePolicy();
             app.UseAuthentication();
+
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<GiveFoodDbContext>();
-                context.Database.EnsureCreated();
+                // context.Database.EnsureCreated();
             }
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "api/{controller=Home}/{action=Index}/{id?}");
+                    template: "api/{controller}/{action}"
+                    );
+
+                routes.MapRoute(
+                    name: "defaultWithId",
+                    template: "api/{controller}/{action}/{id?}"
+                    );
             });
         }
     }

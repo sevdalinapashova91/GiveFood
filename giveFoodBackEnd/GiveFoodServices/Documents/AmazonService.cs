@@ -1,32 +1,53 @@
-﻿
+﻿using Amazon.S3;
+using Amazon.S3.Model;
+using System;
+using System.Threading.Tasks;
+
 namespace GiveFoodServices.Documents
 {
     public class AmazonService : IAmazonService
     {
         private readonly string BucketName = "givefoodbucket";
-        public readonly string KeyName = "";
+        private readonly IAmazonS3 amazonS3Client;
 
-        public void UploadFile(string filePath)
+        public AmazonService(IAmazonS3 amozenS3Client)
         {
-            //try
-            //{
-            //    TransferUtility fileTransferUtility = new
-            //        TransferUtility(new AmazonS3Client(Amazon.RegionEndpoint.EUCentral1));
-
-            //    // 1. Upload a file, file name is used as the object key name.
-            //    fileTransferUtility.Upload(filePath, BucketName);
-
-               
-            //}
-            //catch (AmazonS3Exception s3Exception)
-            //{
-
-          //  }
+            this.amazonS3Client = amozenS3Client;
         }
-        public void DownloadFile()
+
+        public async Task<string> UploadFile()
         {
+            var putRequest = new PutObjectRequest
+            {
+                BucketName = BucketName,
+                Key = Guid.NewGuid().ToString(),
+                ContentBody = "sample text",
+                ContentType = "text/plain"
+            };
+
+            await amazonS3Client.PutObjectAsync(putRequest);
+
+            return putRequest.Key;
+        }
+
+        public async Task<GetObjectResponse> DownloadFile(string keyName)
+        {
+            GetObjectRequest request = new GetObjectRequest
+            {
+                BucketName = BucketName,
+                Key = keyName
+            };
+
+            ResponseHeaderOverrides responseHeaders = new ResponseHeaderOverrides
+            {
+                CacheControl = "No-cache",
+                ContentDisposition = "attachment; filename=testing.txt"
+            };
+
+            request.ResponseHeaderOverrides = responseHeaders;
+            return await amazonS3Client.GetObjectAsync(request);
         }
     }
 
-   
+
 }
