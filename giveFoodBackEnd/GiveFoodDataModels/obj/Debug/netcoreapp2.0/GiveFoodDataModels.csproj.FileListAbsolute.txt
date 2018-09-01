@@ -1,0 +1,8 @@
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodDataModels\bin\Debug\netcoreapp2.0\GiveFoodDataModels.deps.json
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodDataModels\bin\Debug\netcoreapp2.0\GiveFoodDataModels.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodDataModels\bin\Debug\netcoreapp2.0\GiveFoodDataModels.pdb
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.csproj.CoreCompileInputs.cache
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.AssemblyInfoInputs.cache
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.AssemblyInfo.cs
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodDataModels\obj\Debug\netcoreapp2.0\GiveFoodDataModels.pdb

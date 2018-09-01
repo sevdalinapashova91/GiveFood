@@ -17,7 +17,7 @@ namespace GiveFood.DAL.Documents
             this.dbContext = dbContext;
         }
 
-        public void Create(string storageProviderId, string name, Guid creator, DateTime created, DocumentStatus type)
+        public Task CreateAsync(string storageProviderId, string name, Guid creator, DateTime created, DocumentStatus type)
         {
             var document = new Document
             {
@@ -30,14 +30,14 @@ namespace GiveFood.DAL.Documents
 
             dbContext.Add(document);
 
-            dbContext.SaveChangesAsync();
+            return dbContext.SaveChangesAsync();
         }
 
-        public async Task<Document> Get(long id) => await dbContext.Documents.FindAsync(id);
+        public async Task<Document> GetAsync(long id) => await dbContext.Documents.FindAsync(id);
 
         public IQueryable<Document> GetAll() =>  dbContext.Documents;
 
-        public Task UpdateStatus(Document document, DocumentStatus status)
+        public Task UpdateStatusAsync(Document document, DocumentStatus status)
         {
             document.Status = status;
             return dbContext.SaveChangesAsync();

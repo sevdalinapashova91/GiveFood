@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GiveFoodServices.Users.Models;
+using SendGrid;
 
 namespace GiveFoodServices.Users
 {
@@ -7,7 +8,8 @@ namespace GiveFoodServices.Users
     {
         AuthMessageSenderOptions Options { get; }
 
-        Task Execute(string apiKey, string subject, string message, string email);
-        Task SendEmailAsync(string email, string subject, string message);
+        Task<Response> ExecuteAsync(string apiKey, string subject, string message, string email);
+
+        Task<Response> SendEmailAsync(string email, string subject, string message);
     }
 }

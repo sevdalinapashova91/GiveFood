@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using GiveFoodData;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace GiveFoodWebApi
@@ -14,7 +16,25 @@ namespace GiveFoodWebApi
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+
+            var host = BuildWebHost(args);
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<GiveFoodDbContext>();
+                context.Database.Migrate();
+
+                try
+                {
+                    SeedData.Initialize(services, "Admin098@").Wait();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex.Message, "An error occurred seeding the DB.");
+                }
+            }
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

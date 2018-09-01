@@ -1,0 +1,15 @@
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFoodServices.deps.json
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFoodServices.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFoodServices.pdb
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFood.DAL.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFoodData.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFoodDataModels.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFood.DAL.pdb
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFoodDataModels.pdb
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\bin\Debug\netcoreapp2.0\GiveFoodData.pdb
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\obj\Debug\netcoreapp2.0\GiveFoodServices.csprojResolveAssemblyReference.cache
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\obj\Debug\netcoreapp2.0\GiveFoodServices.csproj.CoreCompileInputs.cache
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\obj\Debug\netcoreapp2.0\GiveFoodServices.AssemblyInfoInputs.cache
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\obj\Debug\netcoreapp2.0\GiveFoodServices.AssemblyInfo.cs
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\obj\Debug\netcoreapp2.0\GiveFoodServices.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodServices\obj\Debug\netcoreapp2.0\GiveFoodServices.pdb

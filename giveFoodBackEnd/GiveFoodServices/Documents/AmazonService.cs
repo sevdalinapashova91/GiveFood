@@ -15,7 +15,7 @@ namespace GiveFoodServices.Documents
             this.amazonS3Client = amozenS3Client;
         }
 
-        public async Task<string> UploadFile()
+        public async Task<string> UploadFileAsync()
         {
             var putRequest = new PutObjectRequest
             {
@@ -30,7 +30,7 @@ namespace GiveFoodServices.Documents
             return putRequest.Key;
         }
 
-        public async Task<GetObjectResponse> DownloadFile(string keyName)
+        public async Task<GetObjectResponse> DownloadFileAsync(string keyName)
         {
             GetObjectRequest request = new GetObjectRequest
             {

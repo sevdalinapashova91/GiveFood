@@ -16,13 +16,13 @@ namespace GiveFoodWebApi.Controllers.Upload
         [HttpPost]
         public async Task Upload([FromBody]DocumentUploadDto document)
         {
-            await this.documentService.Upload(document);
+            await this.documentService.UploadAsync(document);
         }
 
         [HttpPost]
         public void Download([FromBody]DocumentViewModel document)
         {
-            this.documentService.Download(document.Id);
+            this.documentService.DownloadAsync(document.Id);
         }
     }
 }

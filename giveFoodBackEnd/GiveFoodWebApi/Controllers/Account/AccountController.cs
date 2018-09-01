@@ -1,6 +1,6 @@
-﻿using GiveFoodDataModels;
-using GiveFoodServices.Users;
+﻿using GiveFoodServices.Users;
 using GiveFoodServices.Users.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -16,28 +16,19 @@ namespace GiveFoodWebApi.Controllers.Account
         }
 
         [HttpPost]
-        public async Task Register([FromBody]UserDto userDto)
-        {
-            await this.authService.Register(userDto);
-        }
+        [AllowAnonymous]
+        public Task Register([FromBody]UserDto userDto) =>
+             this.authService.RegisterAsync(userDto);
 
         [HttpPost]
-        public async Task LogIn([FromBody]LoginDto loginInfo)
-        {
-            await this.authService.Login(loginInfo);
-        }
+        [AllowAnonymous]
+        public Task LogIn([FromBody]LoginDto loginInfo) =>
+            this.authService.LoginAsync(loginInfo);
+       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task LogOut()
-        {
-            await this.authService.Logout();
-        }
-
-        [HttpGet]
-        public string AccessDenied()
-        {
-            return "You are not autorized!";
-        }
+        public Task LogOut() => 
+            this.authService.LogoutAsync();
     }
 }

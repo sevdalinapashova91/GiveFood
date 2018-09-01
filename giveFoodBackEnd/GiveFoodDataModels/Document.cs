@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GiveFoodDataModels
 {
@@ -8,7 +9,14 @@ namespace GiveFoodDataModels
 
         public string StorageProviderId { get; set; }
 
-        public bool IsApproved { get; set; }
+        [NotMapped]
+        public bool IsApproved
+        {
+            get
+            {
+                return Status == DocumentStatus.Approved;
+            }
+        }
 
         public string Name { get; set; }
                 

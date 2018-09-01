@@ -1,0 +1,8 @@
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodInfrastructure\bin\Debug\netstandard2.0\GiveFoodInfrastructure.deps.json
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodInfrastructure\bin\Debug\netstandard2.0\GiveFoodInfrastructure.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodInfrastructure\obj\Debug\netstandard2.0\GiveFoodInfrastructure.csproj.CoreCompileInputs.cache
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodInfrastructure\obj\Debug\netstandard2.0\GiveFoodInfrastructure.AssemblyInfoInputs.cache
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodInfrastructure\obj\Debug\netstandard2.0\GiveFoodInfrastructure.AssemblyInfo.cs
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodInfrastructure\bin\Debug\netstandard2.0\GiveFoodInfrastructure.pdb
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodInfrastructure\obj\Debug\netstandard2.0\GiveFoodInfrastructure.dll
+C:\Users\spashova.DEV\Documents\diplomna\GiveFood\giveFoodBackEnd\GiveFoodInfrastructure\obj\Debug\netstandard2.0\GiveFoodInfrastructure.pdb

@@ -18,17 +18,17 @@ namespace GiveFoodServices.Documents
             this.documentRepo = documentRepo;
         }
 
-        public async Task Upload(DocumentUploadDto uploadDto)
+        public async Task UploadAsync(DocumentUploadDto uploadDto)
         {
-            var fileId = await amazonService.UploadFile();
+            var fileId = await amazonService.UploadFileAsync();
 
-            documentRepo.Create(fileId, uploadDto.Name, uploadDto.Creator, uploadDto.Created, uploadDto.Status);
+            await documentRepo.CreateAsync(fileId, uploadDto.Name, uploadDto.Creator, uploadDto.Created, uploadDto.Status);
         }
 
-        public async Task Download(long documentId)
+        public async Task DownloadAsync(long documentId)
         {
-            var document = await documentRepo.Get(documentId);
-            var storedDocument = await amazonService.DownloadFile(document.StorageProviderId);
+            var document = await documentRepo.GetAsync(documentId);
+            var storedDocument = await amazonService.DownloadFileAsync(document.StorageProviderId);
         }
 
         public IEnumerable<DocumentUploadDto> GetPendingApproval()
@@ -47,11 +47,11 @@ namespace GiveFoodServices.Documents
         }
 
 
-        public async Task Approve(long id, bool isApproved)
+        public async Task ApproveAsync(long id, bool isApproved)
         {
-            var document = await documentRepo.Get(id);
+            var document = await documentRepo.GetAsync(id);
             var documentStatus = isApproved ? DocumentStatus.Approved : DocumentStatus.NotApproved;
-            await documentRepo.UpdateStatus(document, documentStatus);
+            await documentRepo.UpdateStatusAsync(document, documentStatus);
         }
     }
 }

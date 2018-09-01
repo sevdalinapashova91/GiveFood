@@ -18,12 +18,12 @@ namespace GiveFoodServices.Users
 
         public AuthMessageSenderOptions Options { get; }
 
-        public Task SendEmailAsync(string email, string subject, string message)
+        public Task<Response> SendEmailAsync(string email, string subject, string message)
         {
-            return Execute(Options.SendGridKey, subject, message, email);
+            return ExecuteAsync(Options.SendGridKey, subject, message, email);
         }
 
-        public Task Execute(string apiKey, string subject, string message, string email)
+        public Task<Response> ExecuteAsync(string apiKey, string subject, string message, string email)
         {
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()

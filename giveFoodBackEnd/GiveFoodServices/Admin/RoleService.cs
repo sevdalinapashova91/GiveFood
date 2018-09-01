@@ -7,9 +7,9 @@ namespace GiveFoodServices.Roles
     public class RoleService : IRoleService
     {
         private readonly UserManager<User> userManager;
-        private readonly RoleManager<ApplicationRole> roleManager;
+        private readonly RoleManager<UserRole> roleManager;
 
-        public RoleService(UserManager<User> userManager, RoleManager<ApplicationRole> roleManager)
+        public RoleService(UserManager<User> userManager, RoleManager<UserRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;

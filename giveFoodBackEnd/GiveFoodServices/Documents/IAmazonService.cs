@@ -5,8 +5,8 @@ namespace GiveFoodServices.Documents
 {
     public interface IAmazonService
     {
-        Task<GetObjectResponse> DownloadFile(string keyName);
+        Task<GetObjectResponse> DownloadFileAsync(string keyName);
 
-        Task<string> UploadFile();
+        Task<string> UploadFileAsync();
     }
 }

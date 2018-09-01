@@ -2,7 +2,6 @@
 using GiveFoodServices.Users.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace GiveFoodServices.Users
@@ -20,26 +19,30 @@ namespace GiveFoodServices.Users
             this.emailService = emailService;
         }
 
-        public async Task Register(UserDto userDto)
+        public async Task RegisterAsync(UserDto userDto)
         {
             var user = new User { UserName = userDto.Email, Email = userDto.Email };
             var result = await userManager.CreateAsync(user, userDto.Password);
             if (result.Succeeded)
             {
 
-                var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                var callBackUrl = "";
-                await emailService.SendEmailAsync(userDto.Email, "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callBackUrl)}'>clicking here</a>.");
+                //var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                //var callbackUrl = new UrlHelper().Page(
+                //        "/Account/ConfirmEmail",
+                //        pageHandler: null,
+                //        values: new { userId = user.Id, code = code },
+                //        protocol: UvRequest.Scheme);
+                //var test = await emailService.SendEmailAsync(userDto.Email, "Confirm your email",
+                //$"Please confirm your account by ");
             }
         }
 
-        public async Task Logout()
+        public Task LogoutAsync()
         {
-            await signInManager.SignOutAsync();
+            return signInManager.SignOutAsync();
         }
 
-        public async Task Login(LoginDto loginDto)
+        public async Task LoginAsync(LoginDto loginDto)
         {
             var result = await signInManager
                  .PasswordSignInAsync(

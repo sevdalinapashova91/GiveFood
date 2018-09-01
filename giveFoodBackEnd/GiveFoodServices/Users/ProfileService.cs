@@ -14,7 +14,7 @@ namespace GiveFoodServices.Users
             this.userManager = userManager;
         }
 
-        public async Task<ProfileDto> Get(string email)
+        public async Task<ProfileDto> GetAsync(string email)
         {
             var user = await this.userManager.FindByEmailAsync(email);
             return new ProfileDto()
@@ -26,7 +26,7 @@ namespace GiveFoodServices.Users
             };
         }
 
-        public async Task UpdateName(string name, string email)
+        public async Task UpdateNameAsync(string name, string email)
         {
             var user = await this.userManager.FindByEmailAsync(email);
 

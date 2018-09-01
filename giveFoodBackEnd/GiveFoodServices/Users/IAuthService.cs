@@ -5,8 +5,10 @@ namespace GiveFoodServices.Users
 {
     public interface IAuthService
     {
-        Task Login(LoginDto loginDto);
-        Task Logout();
-        Task Register(UserDto userDto);
+        Task LoginAsync(LoginDto loginDto);
+
+        Task LogoutAsync();
+
+        Task RegisterAsync(UserDto userDto);
     }
 }

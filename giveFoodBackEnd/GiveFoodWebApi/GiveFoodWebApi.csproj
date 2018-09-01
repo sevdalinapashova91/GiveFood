@@ -13,6 +13,8 @@
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.HttpsPolicy" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GiveFoodData\GiveFoodData.csproj" />
+    <ProjectReference Include="..\GiveFoodInfrastructure\GiveFoodInfrastructure.csproj" />
     <ProjectReference Include="..\GiveFoodServices\GiveFoodServices.csproj" />
   </ItemGroup>
 
