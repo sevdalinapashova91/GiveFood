@@ -1,0 +1,34 @@
+ <form [formGroup]="profileFormGroup" (ngSubmit)="onSubmit()">
+    <div class="form-content" >
+        <div class="form-group">
+            <label>Име:</label>
+            <input type="text" class="form-control input-underline input-lg col-md-3" placeholder="Име" formControlName="name"/>
+            <div *ngIf="profileFormGroup.controls.name.errors">
+                 <div *ngIf="profileFormGroup.controls.name.errors.required && profileFormGroup.controls.name.dirty" class="alert alert-danger col-md-3">
+                    Името е задължително поле!
+                </div>
+            </div>
+        </div>      
+        <div class="form-group">
+            <label>Емайл:</label>
+            <input type="text"  class="form-control input-underline input-lg col-md-3" placeholder="Емайл"  formControlName="email" disabled/>
+        </div> 
+          <div class="form-group">
+            <label>Кратко описание:</label>
+            <textarea class="form-control input-underline input-lg col-md-3" placeholder="Описание" formControlName="description"></textarea>
+        </div>      
+    </div> 
+    <button class="submit" [disabled]="!profileFormGroup.valid" class="btn btn-success btn-s">Запази</button>&nbsp;   
+</form>
+<div *ngIf="documentName">
+    <label>Документ:</label>    
+    {{documentName}}
+</div>
+<br />
+<div *ngIf="!documentName && !isAdmin()">
+ <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+    <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" 
+    [disabled]="!uploader.getNotUploadedItems().length" >
+        Качи документ за одобрение
+    </button>
+</div>

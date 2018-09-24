@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GiveFood.DAL\GiveFood.DAL.csproj" />
     <ProjectReference Include="..\GiveFoodDataModels\GiveFoodDataModels.csproj" />
+    <ProjectReference Include="..\GiveFoodIntrasture\GiveFoodInfrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,8 +10,22 @@ namespace GiveFoodDataModels
 
         public bool IsRead { get; set; }
 
-        public string Message { get; set; }
-
         public DateTime DateCreated { get; set; }
+
+        public Guid Creator { get; set; }
+
+        public string CreatorName { get; set; }
+
+        public MessageType MessageType { get; set; }
+    }
+
+    public enum MessageType
+    {
+        Invalid,
+        AdminApprovalPending,
+        TakerApprovalPending,
+        GiverApprovalPending,
+        Rejected,
+        Approved,
     }
 }

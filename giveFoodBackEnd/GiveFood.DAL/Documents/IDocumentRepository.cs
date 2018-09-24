@@ -7,12 +7,13 @@ namespace GiveFood.DAL.Documents
 {
     public interface IDocumentRepository
     {
-        Task CreateAsync(string id, string name, Guid creator, DateTime created, DocumentStatus type);
+        Task CreateAsync(string id, string name, Guid creator, DateTime created);
 
         Task<Document> GetAsync(long id);
 
-        IQueryable<Document> GetAll();
+        Task<Document> GetByUser(Guid userId);
 
-        Task UpdateStatusAsync(Document document, DocumentStatus status);
+        IQueryable<Document> GetAll();
+        
     }
 }

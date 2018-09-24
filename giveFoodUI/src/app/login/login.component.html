@@ -3,17 +3,16 @@
         <div class="col-md-4">
             <img src="assets/images/logo.png" width="150px" class="user-avatar" />
             <h1>Дари храна</h1>
+            <br/>
+            <p>
+                Дари храна е приложение, което свързва желаещите да дарят храна с тези, които имат нужда от нея.
+                Вие сте верига супер маркет, ресторант или просто човек с излишна храна? Вие сте неправителствена организация, 
+                която набира средства и търси храна и продукти за нуждаещи се или благотворителна кухня, която има нужда от продукти.
+                Направете своя профил при нас и се свържете с хора, които могат да ви помогнат още сега!     
+            </p>
+            <br />
             <form role="form">
-                <div class="form-content">
-                    <div class="form-group">
-                        <input type="text" ng-model="name" class="form-control input-underline input-lg" id="" placeholder="Емайл">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="Парола">
-                    </div>
-                </div>
-                <a class="btn rounded-btn" [routerLink]="['/dashboard']" (click)="onLoggedin()"> Вход </a>
+                <a class="btn rounded-btn" [routerLink]="['/profile']" (click)="onLoggedin()">Вход</a>
                 &nbsp;
                 <a class="btn rounded-btn" [routerLink]="['/signup']">Регистрация</a>
             </form>

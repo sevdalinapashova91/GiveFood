@@ -11,7 +11,9 @@ namespace GiveFood.DAL.Notifications
 
         IQueryable<Notification> FilterByUser(Guid userId);
 
-        Task CreateAsync(Guid to, string message);
+        IQueryable<Notification> FilterUnread(Guid userId);
+
+        Task CreateAsync(Guid sendTo, Guid creator, MessageType type, string creatorName);
 
         Task UpdateAsync(Notification notification, bool isRead);
 

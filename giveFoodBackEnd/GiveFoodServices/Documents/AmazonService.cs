@@ -1,6 +1,8 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace GiveFoodServices.Documents
@@ -15,19 +17,20 @@ namespace GiveFoodServices.Documents
             this.amazonS3Client = amozenS3Client;
         }
 
-        public async Task<string> UploadFileAsync()
+        public async Task<string> UploadFileAsync(string filePath)
         {
             var putRequest = new PutObjectRequest
             {
                 BucketName = BucketName,
                 Key = Guid.NewGuid().ToString(),
                 ContentBody = "sample text",
-                ContentType = "text/plain"
+                ContentType = "text/plain",
             };
 
             await amazonS3Client.PutObjectAsync(putRequest);
 
             return putRequest.Key;
+
         }
 
         public async Task<GetObjectResponse> DownloadFileAsync(string keyName)

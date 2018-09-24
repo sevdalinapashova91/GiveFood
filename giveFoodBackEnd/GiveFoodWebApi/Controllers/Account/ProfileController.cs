@@ -1,23 +1,29 @@
 ﻿using GiveFoodServices.Users;
 using GiveFoodServices.Users.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace GiveFoodWebApi.Controllers.Account
 {
-    public class ProfileController : Controller
+    [Authorize]
+    public class ProfileController : ApplicationController
     {
-        public readonly ProfileService profileService;
+        public readonly IProfileService profileService;
 
-        public ProfileController(ProfileService profileService)
+        public ProfileController(IProfileService profileService)
         {
             this.profileService = profileService;
         }
 
         [HttpGet]
-        public Task<ProfileDto> Get(string email) => profileService.GetAsync(email);
+        public Task<ProfileDto> Get() => profileService.GetAsync(LoggedUserId);
 
         [HttpPost]
-        public Task UpdateUserProfile([FromBody]ProfileInputModel inputModel) => profileService.UpdateNameAsync(inputModel.Name, string.Empty);
+        public Task UpdateUserProfile([FromBody]ProfileInputModel inputModel)
+             => profileService.UpdateAsync(
+                 inputModel.Name,
+                 LoggedUserId,
+                 inputModel.Description);
     }
 }

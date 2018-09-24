@@ -18,22 +18,22 @@ namespace GiveFoodWebApi
         {
 
             var host = BuildWebHost(args);
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var context = services.GetRequiredService<GiveFoodDbContext>();
-                context.Database.Migrate();
-
-                try
-                {
-                    SeedData.Initialize(services, "Admin098@").Wait();
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex.Message, "An error occurred seeding the DB.");
-                }
-            }
+            //using (var scope = host.Services.CreateScope())
+            //{
+            //    var services = scope.ServiceProvider;
+            //    var context = services.GetRequiredService<GiveFoodDbContext>();
+            //    //context.Database.Migrate();
+            //    context.Database.EnsureCreated();
+            //    try
+            //    {
+            //        SeedData.Initialize(services, "Admin098@").Wait();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        var logger = services.GetRequiredService<ILogger<Program>>();
+            //        logger.LogError(ex.Message, "An error occurred seeding the DB.");
+            //    }
+            //}
             host.Run();
         }
 

@@ -10,8 +10,10 @@ namespace GiveFoodServices.Admin.Models
 
         public UserType Type { get; set; }
 
-        public bool IsApproved { get; set; }
+        public UserStatus Status { get; set; }
 
         public DocumentDto Document { get; set; }
+
+        public string Description { get; set; }
     }
 }

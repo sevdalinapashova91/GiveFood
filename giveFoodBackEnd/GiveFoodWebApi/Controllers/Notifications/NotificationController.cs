@@ -5,55 +5,62 @@ using GiveFoodServices.Users.Models;
 using System;
 using GiveFoodWebApi.Controllers.Notifications.Models;
 using System.Threading.Tasks;
-using GiveFoodDataModels;
-using Microsoft.AspNetCore.Authorization;
 using GiveFoodWebApi.Authorization;
 using GiveFoodWebApi.Controllers.Notifications.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System.Net.Http;
+using GiveFoodWebApi.Controllers.Account;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GiveFoodWebApi.Controllers.Notifications
 {
-    public class NotificationController : Controller
+    [Authorize]
+    public class NotificationController : ApplicationController
     {
         private readonly INotificationService notificationService;
-        private readonly IAuthorizationService authorizationService;
-        private readonly UserManager<User> userManager;
+        private readonly INotificationAuthorizationService authorizationService;
 
-        public NotificationController(INotificationService notificationService, 
-            IAuthorizationService authorizationService,
-            UserManager<User> userManager)
+        public NotificationController(INotificationService notificationService,
+            INotificationAuthorizationService authorizationService)
         {
             this.notificationService = notificationService;
             this.authorizationService = authorizationService;
-            this.userManager = userManager;
         }
 
         [HttpGet]
-        public IEnumerable<NotificationDto> GetAll(Guid userId) =>
-            notificationService.GetAllNotification(userId);
-
+        public IEnumerable<NotificationDto> GetAll() =>
+            notificationService.GetAllNotification(Guid.Parse(LoggedUserId));
 
         [HttpGet]
-        public Task<Notification> Get(long id) =>
-            notificationService.GetAsync(id);
+        public IEnumerable<NotificationDto> GetUnread() => 
+             notificationService.GetUnread(Guid.Parse(LoggedUserId));
+        
+
+        [HttpGet]
+        public async Task<HttpResponseMessage> Get(long id) =>
+           await authorizationService.ExecuteWithAuthorization(
+                new List<OperationAuthorizationRequirement>() { AuthorizationOperations.Read },
+                id,
+                User,
+                () => Ok(notificationService.GetAsync(id)));
+    
 
         [HttpPost]
-        public Task Delete([FromBody]NotificationViewModel inputModel) =>
-            notificationService.DeleteAsync(inputModel.Id);
+        public Task<HttpResponseMessage> Delete([FromBody]NotificationViewModel inputModel) =>
+          authorizationService.ExecuteWithAuthorization(
+                new List<OperationAuthorizationRequirement>() { AuthorizationOperations.Delete },
+                inputModel.Id,
+                 User,
+                 () => notificationService.DeleteAsync(inputModel.Id));
+
 
         [HttpPost]
-        public Task UpdateRead([FromBody]NotificationViewModel inputModel) =>
-            notificationService.UpdateReadAsync(inputModel.Id);
+        public Task<HttpResponseMessage> UpdateRead([FromBody]NotificationViewModel inputModel) =>
+            authorizationService.ExecuteWithAuthorization(
+                 new List<OperationAuthorizationRequirement>() { AuthorizationOperations.Update },
+                 inputModel.Id,
+                 HttpContext.User,
+                () => notificationService.UpdateReadAsync(inputModel.Id));
 
-
-        public async Task<HttpResponseMessage> Authorize(IEnumerable<OperationAuthorizationRequirement> requirements, long id)
-        {
-            var authorizationHandler = new NotificationAuthorizationHandler(userManager);
-            var resource = await notificationService.GetAsync(id);
-            var authorizationService = new AuthorizationService<Notification>(authorizationHandler, requirements, resource, HttpContext.User);
-            return await authorizationService.Authorize();
-        }
     }
 }

@@ -1,0 +1,19 @@
+ <div class="form-content" >
+        <div class="form-group">
+            <label>Име:</label>
+            <div>{{user.name}}</div>
+            <label>Емайл:</label>
+            <div>{{user.email}}</div>
+            <label>Описание:</label>
+            <div>{{user.description}}</div>
+            <!--<button type="button" class="btn btn-primary">Свали</button>-->
+            <div *ngIf="!isApproved()">
+            <button class="btn btn-success btn-s" (click)="onApproveClick()"> Одобри</button>&nbsp;   
+            <button class="btn btn-danger btn-s" (click)="onRejectClick()">Отхвърли</button>&nbsp;
+            </div>
+
+        </div>      
+</div> 
+
+
+

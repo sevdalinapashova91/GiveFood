@@ -14,11 +14,13 @@ using Amazon;
 using GiveFoodServices.Admin;
 using GiveFood.DAL.Documents;
 using GiveFoodServices.Users;
-using GiveFoodServices.Users.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using GiveFood.DAL.Notifications;
+using Hangfire;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using GiveFoodInfrastructure.BackgroudTask;
+using GiveFoodInfrastructure.Tasks;
+using GiveFoodInfrastructure;
 using GiveFoodWebApi.Controllers.Notifications.Authorization;
 
 namespace GiveFoodWebApi
@@ -39,8 +41,9 @@ namespace GiveFoodWebApi
                 options.UseSqlServer(Configuration["GiveFoodDatabase"]));
 
             services.AddIdentity<User, UserRole>()
-                    .AddEntityFrameworkStores<GiveFoodDbContext>()
-                    .AddDefaultTokenProviders();
+                   .AddEntityFrameworkStores<GiveFoodDbContext>()
+                   .AddDefaultTokenProviders();
+
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -61,28 +64,36 @@ namespace GiveFoodWebApi
                 options.SignIn.RequireConfirmedEmail = false;
             });
 
-            services.ConfigureApplicationCookie(options =>
+            services.AddAuthentication(options =>
             {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromMinutes(120);
-                options.LoginPath = "/Account/LogIn"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                options.LogoutPath = "/Account/LogOut"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
-                options.SlidingExpiration = true;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+           .AddIdentityServerAuthentication(options =>
+           {
+               options.Authority = "http://localhost:5000";
+               options.RequireHttpsMetadata = false;
+
+               options.ApiName = "givefoodapi";
+           });
+
+            services.AddMvcCore()
+             .AddAuthorization()
+             .AddJsonFormatters();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("default", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                       .AllowCredentials(); 
+                });
             });
 
-            services.AddMvc(
-                config =>
-                {
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-                    config.Filters.Add(new AuthorizeFilter(policy));
-                }
-             );
-
-            services.AddSignalRCore();
+           services.AddSignalR();
+           services.AddHangfire(x => x.UseSqlServerStorage(Configuration["GiveFoodDatabase"]));
 
             services.AddHsts(options =>
             {
@@ -96,7 +107,7 @@ namespace GiveFoodWebApi
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 5001;
+                options.HttpsPort = 32794;
             });
 
             services.AddScoped<IAmazonS3>(s => new AmazonS3Client(
@@ -105,11 +116,11 @@ namespace GiveFoodWebApi
                 RegionEndpoint.EUCentral1));
 
 
-            services.Configure<AuthMessageSenderOptions>(Configuration);
-
             RepositoryRegistration(services);
 
             ServicesRegistration(services);
+
+            RegisterAuthService(services);
         }
 
         private void RepositoryRegistration(IServiceCollection services)
@@ -117,23 +128,27 @@ namespace GiveFoodWebApi
             services.AddScoped<IDocumentRepository, DocumentRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
         }
-
+        private void RegisterAuthService(IServiceCollection services)
+        {
+            services.AddScoped<INotificationAuthorizationService, NotificationAuthorizationService>();
+        }
         private void ServicesRegistration(IServiceCollection services)
         {
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IApprovalService, ApprovalService>();
+            services.AddSingleton<IRequestApprovalMessageFactory, RequestApprovalMessageFactory>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAmazonService, AmazonService>();
             services.AddScoped<IDocumentService, DocumentService>();
-            services.AddScoped<IAdminService, AdminService>();
-            services.AddSingleton<IEmailService, EmailService>();
-            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IBackgroundTask, BackgroundTask>();
+            services.AddScoped<ISendNotificationTask, SendNotificationTask>();
+            services.AddScoped<INotificationHub, NotificationHub>();
         }
 
-        private void AuthorizationRegistration(IServiceCollection services)
-        {
-            services.AddScoped<IAuthorizationHandler,
-                       NotificationAuthorizationHandler>();
-        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -150,13 +165,22 @@ namespace GiveFoodWebApi
                 app.UseHsts();
             }
 
-            // app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+
+            app.UseCors("default");
+
             app.UseAuthentication();
+
+            app.UseHangfireServer();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationHub> ("/notify");
+            });
 
             app.UseMvc(routes =>
             {
+
                 routes.MapRoute(
                     name: "default",
                     template: "api/{controller}/{action}"
@@ -167,6 +191,8 @@ namespace GiveFoodWebApi
                     template: "api/{controller}/{action}/{id?}"
                     );
             });
+
+          
         }
     }
 }

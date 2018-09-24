@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using GiveFoodDataModels;
 using System.Linq;
+using System;
 
 namespace GiveFoodServices.Admin
 {
@@ -27,16 +28,22 @@ namespace GiveFoodServices.Admin
 
         public async Task EvaluateUserAsync(EvaluateUserDto evaluateUserDto)
         {
-            await documentService.ApproveAsync(evaluateUserDto.DocumentId, evaluateUserDto.IsApproved);
             if (evaluateUserDto.IsApproved && await roleService.IsRoleExist(evaluateUserDto.Type.ToString()))
             {
                 await this.roleService.AssignRoleToUser(evaluateUserDto.Email, evaluateUserDto.Type.ToString());
             }
+            if (!evaluateUserDto.IsApproved)
+            {
+                var user = await this.userManager.FindByEmailAsync(evaluateUserDto.Email);
+                user.Status = UserStatus.NotApproved;
+                await this.userManager.UpdateAsync(user);
+            }
         }
 
-        public IEnumerable<UserDto> GetAllUsers()
+        public IEnumerable<UserDto> GetAllUsers(Guid userId)
         {
             return this.userManager.Users
+                .Where(x=> x.Id != userId)
                 .Select(
                 user =>
                     new UserDto
@@ -44,7 +51,8 @@ namespace GiveFoodServices.Admin
                         Name = user.Name,
                         Email = user.Email,
                         Type = user.Type,
-                        IsApproved = user.Document.IsApproved,
+                        Status = user.Status,
+                        Description = user.Description
                     }
                 )
                 .ToList();
@@ -53,17 +61,18 @@ namespace GiveFoodServices.Admin
         public async Task<UserDto> GetUserAsync(string email)
         {
             var user = await this.userManager.FindByEmailAsync(email);
+            var document = await documentService.GetDocumentByUser(user.Id);
             return new UserDto
             {
-
                 Name = user.Name,
                 Email = user.Email,
                 Type = user.Type,
-                IsApproved = user.Document.IsApproved,
+                Description = user.Description,
+                Status = user.Status,
                 Document = new DocumentDto
                 {
-                    Name = user.Document.Name,
-                    Id = user.Document.Id
+                    Name = document?.Name?? string.Empty,
+                    Id = document?.Id ?? 0,
                 }
             };
         }

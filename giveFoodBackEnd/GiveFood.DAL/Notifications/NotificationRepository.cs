@@ -15,15 +15,17 @@ namespace GiveFood.DAL.Notifications
             this.dbContext = dbContext;
         }
 
-        public Task CreateAsync(Guid sendTo, string message)
+        public Task CreateAsync(Guid sendTo, Guid creator, MessageType type, string creatorName)
         {
             dbContext.Add(
                 new Notification
                 {
                     SendTo = sendTo,
+                    Creator = creator,
                     IsRead = false,
-                    Message = message,
-                    DateCreated = DateTime.UtcNow
+                    MessageType = type,
+                    DateCreated = DateTime.UtcNow,
+                    CreatorName = creatorName,
                 });
 
             return dbContext.SaveChangesAsync();
@@ -36,15 +38,16 @@ namespace GiveFood.DAL.Notifications
             return dbContext.SaveChangesAsync();
         }
 
-        public IQueryable<Notification> FilterByUser(Guid userId)
-        {
-            return dbContext.Notifications.Where(x => x.SendTo == userId);
-        }
+        public IQueryable<Notification> FilterByUser(Guid userId) =>
+            dbContext.Notifications.Where(x => x.SendTo == userId);
 
-        public Task<Notification> Get(long id)
-        {
-            return dbContext.Notifications.FindAsync(id);
-        }
+        public IQueryable<Notification> FilterUnread(Guid userId) =>
+               dbContext.Notifications.Where(x => x.SendTo == userId && !x.IsRead);
+
+
+        public Task<Notification> Get(long id) =>
+            dbContext.Notifications.FindAsync(id);
+
 
         public Task UpdateAsync(Notification notification, bool isRead)
         {

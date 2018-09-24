@@ -3,7 +3,7 @@ using System;
 
 namespace GiveFoodDataModels
 {
-    public class UserRole : IdentityRole
+    public class UserRole : IdentityRole<Guid>
     {
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -1,15 +1,17 @@
 ﻿using GiveFoodServices.Admin;
 using GiveFoodServices.Admin.Models;
 using GiveFoodWebApi.Authorization;
+using GiveFoodWebApi.Controllers.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GiveFoodWebApi.Controllers.Admin
 {
     [Authorize(Roles = RoleConstants.Admin)]
-    public class AdminController : Controller
+    public class AdminController : ApplicationController
     {
         private readonly IAdminService adminService;
 
@@ -20,7 +22,7 @@ namespace GiveFoodWebApi.Controllers.Admin
 
         [HttpGet]
         public IEnumerable<UserDto> GetAll() =>
-            adminService.GetAllUsers();
+            adminService.GetAllUsers(Guid.Parse(LoggedUserId));
 
 
         [HttpGet]

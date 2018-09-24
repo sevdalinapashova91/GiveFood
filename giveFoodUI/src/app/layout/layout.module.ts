@@ -1,3 +1,4 @@
+import { ModalComponent } from './bs-component/components/modal/modal.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';

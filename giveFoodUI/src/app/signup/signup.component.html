@@ -3,48 +3,58 @@
         <div class="col-md-4">
             <img class="user-avatar" src="assets/images/logo.png" width="150px" />
             <h1>Дари Храна</h1>
-            <a class="btn rounded-btn" (click)="setSignUpForm('takerForm')">Аз съм благотворителна oрганизация</a>
-            <a class="btn rounded-btn" (click)="setSignUpForm('giverForm')">Аз съм дарител на храна</a>
-            <div [ngSwitch]="registerFormName">
-                <form  role="form" *ngSwitchCase="'giverForm'">
+            <div>
+                <form [formGroup]="registerFormGroup" (ngSubmit)="onSubmit()">
                     <div class="form-content" >
                         <div class="form-group">
-                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Име">
+                            <input type="text" class="form-control input-underline input-lg" id="name" placeholder="Име" formControlName="name"/>
+                             <div *ngIf="registerForm.name.errors">
+                                <div *ngIf="registerForm.name.errors.required && registerForm.name.dirty" class="alert alert-danger">
+                                    Името е задължително поле!
+                                </div>
+                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Фамилия">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Емайл">
+                            <input type="text" class="form-control input-underline input-lg" id="email" placeholder="Емайл" formControlName="email"/>
+                            <div *ngIf="registerForm.email.errors">
+                            <div *ngIf="registerForm.email.errors.required && registerForm.email.dirty" class="alert alert-danger">
+                                Емайлът е задължително поле!
+                            </div>
+                             <div *ngIf="registerForm.email.errors.email && registerForm.email.dirty" class="alert alert-danger">
+                                Невалиден емайл!
+                            </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="password" class="form-control input-underline input-lg" id="" placeholder="Парола">
+                            <input type="password" class="form-control input-underline input-lg" id="password" placeholder="Парола"  formControlName="password"/>
+                            <div *ngIf="registerForm.password.errors">
+                                <div *ngIf="registerForm.password.errors.required && registerForm.password.dirty" class="alert alert-danger">
+                                    Паролата е задължително поле!
+                                </div>
+                                 <div *ngIf="(registerForm.password.errors.minlength || registerForm.password.errors.pattern) && registerForm.password.dirty" class="alert alert-danger">
+                                    Паролата трябва да е поне 8 символа и да съдържа голяма и малка буква, цифра и специален знак!
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control input-underline input-lg" id="" placeholder="Повтори Парола">
+                            <input type="password" class="form-control input-underline input-lg" id="confirmpassword" placeholder="Повтори Парола" formControlName="confirmPassword" />
+                            <div *ngIf="registerForm.confirmPassword.errors">
+                             <div *ngIf="registerForm.confirmPassword.errors.required && registerForm.confirmPassword.dirty" class="alert alert-danger">
+                                Потвърждението на паролата е задължително поле!
+                            </div>
+                             <div *ngIf="registerForm.confirmPassword.errors.notEquivalent && registerForm.confirmPassword.dirty" class="alert alert-danger">
+                                Паролите не съвпадат!
+                            </div>
+                            </div>
                         </div>
-                    </div>
-                    <a class="btn rounded-btn" [routerLink]="['/tables']"> Регистрирай се</a>&nbsp;
-                </form>
-                <form  role="form" *ngSwitchCase="'takerForm'">
-                    <div class="form-content" >
-                        <div class="form-group">
-                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Име на организацията">
-                        </div>                    
-                        <div class="form-group">
-                            <input type="text" class="form-control input-underline input-lg" id="" placeholder="Емайл">
-                        </div>
-
-                        <div class="form-group">
-                            <input type="password" class="form-control input-underline input-lg" id="" placeholder="Парола">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control input-underline input-lg" id="" placeholder="Повтори Парола">
-                        </div>
-                    </div>
-                    <a class="btn rounded-btn" [routerLink]="['/tables']">Регистрирай се</a>&nbsp;
-                </form>
+                        <div>
+                          <input type="radio"  name="type" value="1"  formControlName="type" checked/>Аз съм дарител на храна <br/>
+                          <input type="radio" name="type" value="2"  formControlName="type" />Аз съм получател на храна
+                        </div>    
+                      </div>
+                    <button type="submit" class="btn rounded-btn" [disabled]="!registerFormGroup.valid">Регистрирай се</button>&nbsp;
+                </form>                
             </div>
         </div>
     </div>

@@ -4,6 +4,7 @@ using GiveFoodServices.Documents.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace GiveFoodServices.Documents
 {
@@ -20,9 +21,9 @@ namespace GiveFoodServices.Documents
 
         public async Task UploadAsync(DocumentUploadDto uploadDto)
         {
-            var fileId = await amazonService.UploadFileAsync();
+            var fileId = await amazonService.UploadFileAsync(uploadDto.Name);
 
-            await documentRepo.CreateAsync(fileId, uploadDto.Name, uploadDto.Creator, uploadDto.Created, uploadDto.Status);
+            await documentRepo.CreateAsync(fileId, uploadDto.Name, uploadDto.Creator, uploadDto.Created);
         }
 
         public async Task DownloadAsync(long documentId)
@@ -31,27 +32,7 @@ namespace GiveFoodServices.Documents
             var storedDocument = await amazonService.DownloadFileAsync(document.StorageProviderId);
         }
 
-        public IEnumerable<DocumentUploadDto> GetPendingApproval()
-        {
-            return documentRepo
-                .GetAll()
-                .Where(x => x.Status == DocumentStatus.PendingApproval)
-                .Select(x => new DocumentUploadDto
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Creator = x.Creator,
-                    Created = x.Created,
-                    Status = x.Status
-                });
-        }
-
-
-        public async Task ApproveAsync(long id, bool isApproved)
-        {
-            var document = await documentRepo.GetAsync(id);
-            var documentStatus = isApproved ? DocumentStatus.Approved : DocumentStatus.NotApproved;
-            await documentRepo.UpdateStatusAsync(document, documentStatus);
-        }
+        public Task<Document> GetDocumentByUser(Guid userId)
+        => this.documentRepo.GetByUser(userId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using GiveFoodServices.Admin.Models;
 using System.Collections.Generic;
+using System;
 
 namespace GiveFoodServices.Admin
 {
@@ -10,6 +11,6 @@ namespace GiveFoodServices.Admin
 
         Task<UserDto> GetUserAsync(string email);
 
-        IEnumerable<UserDto> GetAllUsers();
+        IEnumerable<UserDto> GetAllUsers(Guid userId);
     }
 }

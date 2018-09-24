@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using GiveFoodServices.Documents.Models;
+using GiveFoodDataModels;
+using System;
 
 namespace GiveFoodServices.Documents
 {
@@ -7,6 +9,6 @@ namespace GiveFoodServices.Documents
     {
         Task UploadAsync(DocumentUploadDto uploadDto);
         Task DownloadAsync(long documentId);
-        Task ApproveAsync(long id, bool isApproved);
+        Task<Document> GetDocumentByUser(Guid userId);
     }
 }

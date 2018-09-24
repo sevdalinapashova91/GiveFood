@@ -1,14 +1,17 @@
 ﻿using GiveFoodServices.Users;
 using GiveFoodServices.Users.Models;
+using GiveFoodWebApi.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GiveFoodWebApi.Controllers.Account
 {
     public class AccountController : Controller
     {
-        private readonly IAuthService authService;
+        private readonly IAuthService authService;      
 
         public AccountController(IAuthService authService)
         {
@@ -16,19 +19,31 @@ namespace GiveFoodWebApi.Controllers.Account
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public Task Register([FromBody]UserDto userDto) =>
              this.authService.RegisterAsync(userDto);
 
-        [HttpPost]
-        [AllowAnonymous]
-        public Task LogIn([FromBody]LoginDto loginInfo) =>
-            this.authService.LoginAsync(loginInfo);
-       
+    }
+    public class IdentityController : ApplicationController
+    {
+        private readonly IProfileService profileService;
+        public IdentityController(IProfileService profileService)
+        {
+            this.profileService = profileService;
+        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public Task LogOut() => 
-            this.authService.LogoutAsync();
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAuthContext() => Ok(new AuthContext
+        {
+            UserProfile = await this.profileService.GetAsync(LoggedUserId),
+            Claims = User.Claims
+                .Select(claim => new SimpleClaim
+                {
+                    Type = claim.Type,
+                    Value = claim.Value
+                })
+                .ToList()
+        });
     }
 }
+

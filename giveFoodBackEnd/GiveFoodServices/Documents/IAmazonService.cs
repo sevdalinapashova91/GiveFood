@@ -7,6 +7,6 @@ namespace GiveFoodServices.Documents
     {
         Task<GetObjectResponse> DownloadFileAsync(string keyName);
 
-        Task<string> UploadFileAsync();
+        Task<string> UploadFileAsync(string filePath);
     }
 }

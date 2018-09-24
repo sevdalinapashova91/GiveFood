@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -24,21 +22,22 @@ namespace GiveFoodWebApi.Authorization
             )
         {
             this.authorizationHandler = authorizationHandler;
+            this.requirements = requirements;
             this.resource = resource;
             this.user = user;
         }
 
-        public async Task<HttpResponseMessage> Authorize()
+        public async Task<bool> IsAuthorized()
         {
             try
             {
                 var context = new AuthorizationHandlerContext(requirements, user, resource);
                 await authorizationHandler.HandleAsync(context);
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                return true;
             }
             catch
             {
-                return new HttpResponseMessage(HttpStatusCode.Forbidden);
+                return false;
             }
         }
     }

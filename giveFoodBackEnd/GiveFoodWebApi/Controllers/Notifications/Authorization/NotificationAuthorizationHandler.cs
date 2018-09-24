@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiveFoodWebApi.Controllers.Notifications.Authorization
@@ -11,6 +12,7 @@ namespace GiveFoodWebApi.Controllers.Notifications.Authorization
     public class NotificationAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Notification>
     {
         private readonly UserManager<User> userManager;
+
         public NotificationAuthorizationHandler(UserManager<User> userManager)
         {
             this.userManager = userManager;
@@ -23,7 +25,7 @@ namespace GiveFoodWebApi.Controllers.Notifications.Authorization
         {
             if (context.User == null || resource == null)
             {
-                return Task.CompletedTask;
+                return Task.CompletedTask; 
             }
 
             if (requirement.Name != AuthorizationConstants.CreateOperationName &&
@@ -34,7 +36,9 @@ namespace GiveFoodWebApi.Controllers.Notifications.Authorization
                 return Task.CompletedTask;
             }
 
-            if (resource.SendTo == Guid.Parse(userManager.GetUserId(context.User)))
+            var userId = context.User.Claims.FirstOrDefault(x => x.Type == "sub").Value;
+
+            if (resource.SendTo == Guid.Parse(userId))
             {
                 context.Succeed(requirement);
             }

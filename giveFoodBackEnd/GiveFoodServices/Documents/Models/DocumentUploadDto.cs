@@ -13,8 +13,6 @@ namespace GiveFoodServices.Documents.Models
 
         public Guid Creator { get; set; }
 
-        public DateTime Created { get; set; }
-
-        public DocumentStatus Status { get; set; }
+        public DateTime Created { get; set; }        
     }
 }
